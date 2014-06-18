@@ -1,6 +1,6 @@
 {
   "name": "quinn-router",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Routing for quinn",
   "main": "dist/router.js",
   "scripts": {
