@@ -15,13 +15,13 @@ function segmentsMatcher(method, pattern, handler) {
   };
 }
 
-function exactMatcher(method, path, handler) {
+function exactMatcher(method, pattern, handler) {
   return function(req) {
     if (method !== null && req.method !== method) {
       return null;
     }
     var parsed = parseUrl(req);
-    if (parsed.pathname === path) {
+    if (parsed.pathname === pattern) {
       return handler(req, {});
     }
     return null;
@@ -29,11 +29,11 @@ function exactMatcher(method, path, handler) {
 }
 
 function makeMatcher(opts) {
-  var method = opts.method, path = opts.path, handler = opts.handler;
-  if (path.indexOf('{') === -1) {
-    return exactMatcher(method, path, handler);
+  var method = opts.method, pattern = opts.pattern, handler = opts.handler;
+  if (pattern.indexOf('{') === -1) {
+    return exactMatcher(method, pattern, handler);
   } else {
-    return segmentsMatcher(method, path, handler);
+    return segmentsMatcher(method, pattern, handler);
   }
 }
 

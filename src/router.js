@@ -14,10 +14,10 @@ class Router {
     this._addVanityMethods();
   }
 
-  addRoute(method, path, handler) {
+  addRoute(method, pattern, handler) {
     this.matchers.push({
       method: method,
-      path: path,
+      pattern: pattern,
       handler: handler
     });
     return this;

@@ -14,10 +14,10 @@ if (METHODS === undefined) METHODS = require('./methods');
     this.$Router0();
   }
 
-  Router.prototype.addRoute=function(method, path, handler) {
+  Router.prototype.addRoute=function(method, pattern, handler) {
     this.matchers.push({
       method: method,
-      path: path,
+      pattern: pattern,
       handler: handler
     });
     return this;
