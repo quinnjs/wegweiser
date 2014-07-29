@@ -41,8 +41,7 @@ describe('exact match', function() {
 
       var handle = route(function(router) {
         router.ALL('/bar', function(req, params) {
-          assert.equal(originalReq, req);
-          return 'ok';
+          throw new Error('Should not be called');
         });
       });
       var res = handle(originalReq);

@@ -45,10 +45,7 @@ describe('path segment', function() {
 
       var handle = route(function(router) {
         router.GET('/{thing}/_search/{ding}', function(req, params) {
-          assert.equal(originalReq, req);
-          assert.equal('foo', params.thing);
-          assert.equal('xy', params.ding);
-          return 'ok';
+          throw new Error('Should not be called');
         });
       });
       var res = handle(originalReq);
