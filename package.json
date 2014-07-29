@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "assertive-as-promised": "^0.1.0",
+    "jshint": "^2.5.2",
     "mocha": "^1.21.3",
     "quinnc": "^1.0.0"
   }

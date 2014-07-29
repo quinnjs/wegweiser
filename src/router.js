@@ -31,10 +31,10 @@ class Router {
       this[verb.toLowerCase()] = this.addRoute.bind(this, verb);
     }
 
-    this['ALL'] = this.addRoute.bind(this, null);
-    this['all'] = this.addRoute.bind(this, null);
+    this.ALL = this.addRoute.bind(this, null);
+    this.all = this.addRoute.bind(this, null);
 
-    this['del'] = this.addRoute.bind(this, 'DELETE');
+    this.del = this.addRoute.bind(this, 'DELETE');
   }
 }
 

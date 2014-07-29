@@ -25,7 +25,7 @@ function exactMatcher(method, path, handler) {
       return handler(req, {});
     }
     return null;
-  }
+  };
 }
 
 function makeMatcher(opts) {
