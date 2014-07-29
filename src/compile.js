@@ -55,7 +55,7 @@ export function _compileRoute(pattern) {
 var compileRoute = memoize(_compileRoute);
 
 export function matchRoute(reqMethod, parsedUrl, method, pattern) {
-  if (method !== 'ALL' && reqMethod !== method) {
+  if (method !== null && reqMethod !== method) {
     return null;
   }
 

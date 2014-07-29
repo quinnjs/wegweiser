@@ -1,67 +1,54 @@
 'use strict';
 
-import { parse as parseUrl } from 'url';
 import { METHODS } from 'http';
+
+import handleWithMatchers from './matcher';
 
 // Not all node versions supports this
 if (METHODS === undefined) METHODS = require('./methods');
 
-import Bluebird from 'bluebird';
-import {partial} from 'lodash';
-import resolveDeep from 'resolve-deep';
-
-import {matchRoute} from './compile';
-
-function defaultParamsParser(req, parsedUrl, pathParams) {
-  return pathParams;
-}
-
 class Router {
-  constructor(request) {
-    this._request = request;
-    this._response = undefined;
+  constructor() {
+    this.matchers = [];
 
-    this._parsedUrl = parseUrl(request.url, true);
+    this._addVanityMethods();
+  }
 
+  addRoute(method, path, handler) {
+    this.matchers.push({
+      method: method,
+      path: path,
+      handler: handler
+    });
+    return this;
+  }
+
+  _addVanityMethods() {
     var verb, i;
     for (i = 0; i < METHODS.length; ++i) {
       verb = METHODS[i];
-      this[verb] = this.tryRoute.bind(this, verb);
-    }
-  }
-
-  getResponse() {
-    return this._response;
-  }
-
-  tryRoute(method, pattern, handler, paramsParser) {
-    if (this._response !== undefined) return;
-
-    if (typeof handler !== 'function') {
-      throw new Error('Expected function as handler');
+      this[verb] = this.addRoute.bind(this, verb);
+      this[verb.toLowerCase()] = this.addRoute.bind(this, verb);
     }
 
-    if (paramsParser === undefined) paramsParser = defaultParamsParser;
-    if (typeof paramsParser !== 'function') {
-      throw new Error('Expected function as paramsParser');
-    }
+    this['ALL'] = this.addRoute.bind(this, null);
+    this['all'] = this.addRoute.bind(this, null);
 
-    var req = this._request;
-    var pathParams = matchRoute(req.method, this._parsedUrl, method, pattern);
-    if (pathParams !== null) {
-      var params = Bluebird.try(
-        paramsParser, [ req, this._parsedUrl, pathParams ]);
-
-      this._response = resolveDeep(params).then(partial(handler, req));
-    }
-    return this;
+    this['del'] = this.addRoute.bind(this, 'DELETE');
   }
 }
 
-export function route(routeDef) {
-  return function(req) {
-    var router = new Router(req);
-    routeDef(router);
-    return router.getResponse();
-  };
+Object.defineProperty(Router.prototype, 'handle', {
+  get: function() {
+    return handleWithMatchers(this.matchers);
+  }
+});
+
+function route(spec) {
+  var router = new Router();
+  spec(router);
+  return router.handle;
 }
+
+export default route;
+export { Router, route };

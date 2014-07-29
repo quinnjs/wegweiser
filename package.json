@@ -19,9 +19,12 @@
   "dependencies": {
     "bluebird": "^2.1.2",
     "lodash": "^2.4.1",
+    "parseurl": "^1.2.0",
     "resolve-deep": "^1.0.1"
   },
   "devDependencies": {
+    "assertive-as-promised": "^0.1.0",
+    "mocha": "^1.21.3",
     "quinnc": "^1.0.0"
   }
 }
