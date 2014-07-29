@@ -1,54 +1,46 @@
 'use strict';
 
 import parseUrl from 'parseurl';
-
-import { matchRoute } from './compile';
-
-function segmentsMatcher(method, pattern, handler) {
-  return function(req) {
-    var parsed = parseUrl(req);
-    var params = matchRoute(req.method, parsed, method, pattern);
-    if (params === null) {
-      return null;
-    }
-    return handler(req, params);
-  };
-}
-
-function exactMatcher(method, pattern, handler) {
-  return function(req) {
-    if (method !== null && req.method !== method) {
-      return null;
-    }
-    var parsed = parseUrl(req);
-    if (parsed.pathname === pattern) {
-      return handler(req, {});
-    }
-    return null;
-  };
-}
-
-function makeMatcher(opts) {
-  var method = opts.method, pattern = opts.pattern, handler = opts.handler;
-  if (pattern.indexOf('{') === -1) {
-    return exactMatcher(method, pattern, handler);
-  } else {
-    return segmentsMatcher(method, pattern, handler);
-  }
-}
+import routington from 'routington';
 
 function handleWithMatchers(matchers) {
-  matchers = matchers.map(makeMatcher);
-  var len = matchers.length;
+  var trieByMethod = {};
+
+  function getTrieForMethod(method) {
+    if (trieByMethod[method] === undefined) {
+      trieByMethod[method] = routington();
+    }
+    return trieByMethod[method];
+  }
+
+  function register(trie, matcher) {
+    var pattern = matcher.pattern;
+    var nodes = trie.define(pattern);
+    var node = nodes[0];
+    node.handler = matcher.handler;
+  }
+
+  matchers.forEach(function(matcher) {
+    if (matcher.method !== null) {
+      register(getTrieForMethod(matcher.method), matcher);
+    } else {
+      register(getTrieForMethod('ALL'), matcher);
+    }
+  });
 
   return function(req) {
-    var idx, res;
-    for (idx = 0; idx < len; ++idx) {
-      res = matchers[idx](req);
-      if (res !== null) {
-        return res;
-      }
-    }
+    var trie = trieByMethod[req.method] || trieByMethod.ALL;
+    if (!trie) return;
+
+    var parsed = parseUrl(req);
+    var match = trie.match(parsed.pathname);
+    if (match === undefined) return;
+
+    var handler = match.node.handler;
+    var params = match.param;
+    if (handler === undefined) return;
+
+    return handler(req, params);
   };
 }
 

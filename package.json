@@ -20,7 +20,8 @@
     "bluebird": "^2.1.2",
     "lodash": "^2.4.1",
     "parseurl": "^1.2.0",
-    "resolve-deep": "^1.0.1"
+    "resolve-deep": "^1.0.1",
+    "routington": "^1.0.0"
   },
   "devDependencies": {
     "assertive-as-promised": "^0.1.0",

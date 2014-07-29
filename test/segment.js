@@ -10,7 +10,7 @@ describe('path segment', function() {
       var originalReq = { url: '/foo/_search/xy?a=b', method: 'GET' };
 
       var handle = route(function(router) {
-        router.GET('/{thing}/_search/{ding}', function(req, params) {
+        router.GET('/:thing/_search/:ding', function(req, params) {
           assert.equal(originalReq, req);
           assert.equal('foo', params.thing);
           assert.equal('xy', params.ding);
@@ -27,7 +27,7 @@ describe('path segment', function() {
       var originalReq = { url: '/foo/_search/xy?a=b', method: 'PUT' };
 
       var handle = route(function(router) {
-        router.ALL('/{thing}/_search/{ding}', function(req, params) {
+        router.ALL('/:thing/_search/:ding', function(req, params) {
           assert.equal(originalReq, req);
           assert.equal('foo', params.thing);
           assert.equal('xy', params.ding);
@@ -44,7 +44,7 @@ describe('path segment', function() {
       var originalReq = { url: '/foo?a=b', method: 'PUT' };
 
       var handle = route(function(router) {
-        router.GET('/{thing}/_search/{ding}', function(req, params) {
+        router.GET('/:thing/_search/:ding', function(req, params) {
           throw new Error('Should not be called');
         });
       });

@@ -48,4 +48,18 @@ describe('exact match', function() {
       assert.equal(undefined, res);
     });
   });
+
+  describe('match for different method only', function() {
+    it('returns undefined', function() {
+      var originalReq = { url: '/foo?a=b', method: 'PUT' };
+
+      var handle = route(function(router) {
+        router.POST('/foo', function(req, params) {
+          throw new Error('Should not be called');
+        });
+      });
+      var res = handle(originalReq);
+      assert.equal(undefined, res);
+    });
+  });
 });
