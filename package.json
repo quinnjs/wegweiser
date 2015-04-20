@@ -1,0 +1,23 @@
+{
+  "name": "wegweiser",
+  "version": "1.0.0",
+  "description": "A router for Quinn",
+  "main": "wegweiser.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Jan Krems <jan.krems@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/quinnjs/wegweiser.git"
+  },
+  "keywords": [
+    "quinn",
+    "router"
+  ],
+  "bugs": {
+    "url": "https://github.com/quinnjs/wegweiser/issues"
+  },
+  "homepage": "https://github.com/quinnjs/wegweiser"
+}
