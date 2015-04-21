@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/quinnjs/wegweiser/issues"
   },
-  "homepage": "https://github.com/quinnjs/wegweiser"
+  "homepage": "https://github.com/quinnjs/wegweiser",
+  "devDependencies": {
+    "mocha": "^2.2.4"
+  }
 }
