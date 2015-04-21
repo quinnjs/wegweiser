@@ -1,5 +1,7 @@
 # Wegweiser
 
+[![Build Status](https://travis-ci.org/quinnjs/wegweiser.svg?branch=master)](https://travis-ci.org/quinnjs/wegweiser)
+
 A router for [Quinn](https://www.npmjs.org/package/quinn).
 
 ```js
