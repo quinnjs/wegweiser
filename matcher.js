@@ -52,6 +52,7 @@ function createMatcher(method, strings, dynamicSegments, onMatch) {
     }
 
     routeArgsByReq.set(req, args);
+    /*jshint validthis:true */
     return onMatch.apply(this, [ req ].concat(args));
   }
 
@@ -59,8 +60,7 @@ function createMatcher(method, strings, dynamicSegments, onMatch) {
     method: method,
     staticSegments: staticSegments,
     dynamicSegments: dynamicSegments,
-    onMatch: onMatch,
-    context: context
+    onMatch: onMatch
   });
 
   return matcher;
@@ -90,7 +90,7 @@ methods.forEach(function(method) {
           configurable: descriptor.configurable,
           writeable: descriptor.writeable,
           value: createMatcher(method, strings, params, descriptor.value)
-        }
+        };
       }
     };
   };
