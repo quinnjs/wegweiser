@@ -7,7 +7,7 @@ function nonEmpty(str) { return str !== ''; }
 const routeArgsByReq = new WeakMap();
 const matcherOptions = new WeakMap();
 
-function createMatcher(method, strings, dynamicSegments, onMatch, context) {
+function createMatcher(method, strings, dynamicSegments, onMatch) {
   const staticSegments = strings.map(function(str) {
     return str.split('/').filter(nonEmpty);
   });
@@ -52,7 +52,7 @@ function createMatcher(method, strings, dynamicSegments, onMatch, context) {
     }
 
     routeArgsByReq.set(req, args);
-    return onMatch.apply(context, [ req ].concat(args));
+    return onMatch.apply(this, [ req ].concat(args));
   }
 
   matcherOptions.set(matcher, {
@@ -81,8 +81,17 @@ createMatcher.methods = methods;
 methods.forEach(function(method) {
   createMatcher[method] = function methodMatcher(strings) {
     const params = [].slice.call(arguments, 1);
-    return function(onMatch) {
-      return createMatcher(method, strings, params, onMatch, null);
+    return function(target, propName, descriptor) {
+      if (arguments.length === 1) { // we just decorate a function
+        return createMatcher(method, strings, params, target);
+      } else if (arguments.length === 3) {
+        return {
+          enumberable: descriptor.enumberable,
+          configurable: descriptor.configurable,
+          writeable: descriptor.writeable,
+          value: createMatcher(method, strings, params, descriptor.value)
+        }
+      }
     };
   };
 });
