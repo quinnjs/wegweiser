@@ -3,7 +3,8 @@
 const assert = require('assert');
 
 const Wegweiser = require('../'),
-      GET = Wegweiser.GET;
+      GET = Wegweiser.GET,
+      PUT = Wegweiser.PUT;
 
 describe('matcher', function() {
   describe('static path', function() {
@@ -46,6 +47,20 @@ describe('matcher', function() {
       const res = handler(req);
       assert.strictEqual(res.request, req);
       assert.strictEqual(res.id, '123');
+    });
+  });
+
+  describe('with multiple segments', function() {
+    const handler = PUT `/pages/${String}/${Number}` (function(req, user, id) {
+      return { request: req, user: user, id: id };
+    });
+
+    it('accepts PUT /pages/robin/42', function() {
+      const req = { method: 'PUT', url: '/pages/robin/42' };
+      const res = handler(req);
+      assert.strictEqual(res.request, req);
+      assert.strictEqual(res.user, 'robin');
+      assert.strictEqual(res.id, 42);
     });
   });
 
