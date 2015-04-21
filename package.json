@@ -4,7 +4,7 @@
   "description": "A router for Quinn",
   "main": "wegweiser.js",
   "scripts": {
-    "test": "mocha"
+    "test": "jshint *.js && mocha"
   },
   "author": "Jan Krems <jan.krems@gmail.com>",
   "license": "MIT",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/quinnjs/wegweiser",
   "devDependencies": {
+    "jshint": "^2.7.0",
     "mocha": "^2.2.4"
   }
 }

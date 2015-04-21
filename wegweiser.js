@@ -4,6 +4,6 @@ const createMatcher = require('./matcher');
 
 exports.getRouteArg = createMatcher.getRouteArg;
 
-for (const method of createMatcher.methods) {
+createMatcher.methods.forEach(function(method) {
   exports[method] = createMatcher[method];
-}
+});

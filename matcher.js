@@ -29,7 +29,8 @@ function createMatcher(method, strings, dynamicSegments, onMatch, context) {
 
     let args = [];
 
-    for (const segment of segments) {
+    for (let idx = 0; idx < segments.length; ++idx) {
+      const segment = segments[idx];
       if (curSubMax === curSubIdx) {
         const param = dynamicSegments[nextDynamic++];
         let value = segment;
@@ -43,7 +44,8 @@ function createMatcher(method, strings, dynamicSegments, onMatch, context) {
 
         cur = staticSegments[++curIdx];
         if (!cur) return;
-        curSubIdx = 0, curSubMax = cur.length;
+        curSubIdx = 0;
+        curSubMax = cur.length;
       } else if (cur[curSubIdx++] !== segment) {
         return;
       }
@@ -82,7 +84,7 @@ methods.forEach(function(method) {
     return function(onMatch) {
       return createMatcher(method, strings, params, onMatch, null);
     };
-  }
+  };
 });
 
 module.exports = createMatcher;
