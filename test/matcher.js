@@ -4,7 +4,8 @@ const assert = require('assert');
 
 const Wegweiser = require('../'),
       GET = Wegweiser.GET,
-      PUT = Wegweiser.PUT;
+      PUT = Wegweiser.PUT,
+      getRouteArg = Wegweiser.getRouteArg;
 
 describe('matcher', function() {
   describe('static path', function() {
@@ -47,6 +48,8 @@ describe('matcher', function() {
       const res = handler(req);
       assert.strictEqual(res.request, req);
       assert.strictEqual(res.id, '123');
+      assert.strictEqual(getRouteArg(req, 'id'), '123');
+      assert.strictEqual(getRouteArg(req, 0), '123');
     });
   });
 
@@ -61,6 +64,7 @@ describe('matcher', function() {
       assert.strictEqual(res.request, req);
       assert.strictEqual(res.user, 'robin');
       assert.strictEqual(res.id, 42);
+      assert.strictEqual(getRouteArg(req, 1), 42);
     });
   });
 

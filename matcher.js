@@ -64,6 +64,15 @@ function createMatcher(method, strings, dynamicSegments, onMatch, context) {
   return matcher;
 }
 
+function getRouteArg(req, name) {
+  const args = routeArgsByReq.get(req);
+  if (args === undefined) {
+    throw new Error('Could not find route arguments for request');
+  }
+  return args[name];
+}
+createMatcher.getRouteArg = getRouteArg;
+
 const methods = [ 'GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'HEAD' ];
 createMatcher.methods = methods;
 
