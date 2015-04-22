@@ -51,8 +51,10 @@ function getScopedAnnotate(method, staticSegments, params) {
 const methods = [ 'GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'HEAD' ];
 exports.methods = methods;
 
+const slice = [].slice;
 methods.forEach(function(method) {
-  exports[method] = function METHOD(staticSegments, ...params) {
+  exports[method] = function METHOD(staticSegments) {
+    const params = slice.call(arguments, 1);
     return getScopedAnnotate(method, staticSegments, params);
   };
 });

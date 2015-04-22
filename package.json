@@ -4,7 +4,7 @@
   "description": "A router for Quinn",
   "main": "wegweiser.js",
   "scripts": {
-    "test": "jshint *.js && node --harmony-rest-parameters --harmony-arrow-functions test test/*"
+    "test": "jshint *.js && node --harmony-arrow-functions test test/*"
   },
   "author": "Jan Krems <jan.krems@gmail.com>",
   "license": "MIT",

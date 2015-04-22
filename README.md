@@ -4,9 +4,7 @@
 
 A router for [Quinn](https://www.npmjs.org/package/quinn).
 
-Running the code currently requires io.js v2/next-nightly
-with the `--harmony-rest-parameters` flag.
-For actually using decorators, babel with `--stage 1` should work.
+For decorators, you'll need babel with `--stage 1`.
 
 ```js
 import { createRouter, GET, PUT } from 'wegweiser';
