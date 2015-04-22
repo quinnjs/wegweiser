@@ -4,7 +4,7 @@
   "description": "A router for Quinn",
   "main": "wegweiser.js",
   "scripts": {
-    "test": "jshint *.js && mocha"
+    "test": "jshint *.js && node --harmony-rest-parameters --harmony-arrow-functions test test/*"
   },
   "author": "Jan Krems <jan.krems@gmail.com>",
   "license": "MIT",
@@ -22,6 +22,6 @@
   "homepage": "https://github.com/quinnjs/wegweiser",
   "devDependencies": {
     "jshint": "^2.7.0",
-    "mocha": "^2.2.4"
+    "tape": "^4.0.0"
   }
 }

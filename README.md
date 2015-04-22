@@ -4,7 +4,13 @@
 
 A router for [Quinn](https://www.npmjs.org/package/quinn).
 
+Running the code currently requires io.js v2/next-nightly
+with the `--harmony-rest-parameters` flag.
+For actually using decorators, babel with `--stage 1` should work.
+
 ```js
+import { createRouter, GET, PUT } from 'wegweiser';
+
 const simpleHandler = GET `/my/scope` (req => {
   return respond().body('ok');
 });
@@ -23,4 +29,7 @@ class PretendingItsJava {
     return respond.json({ ok: true, firstName: data.firstName });
   }
 }
+
+const router = createRouter(simpleHandler, usingDecorators, PretendingItsJava);
+// router is a quinn handler; (req) => respond()
 ```
