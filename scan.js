@@ -10,7 +10,9 @@ function scanFunction(handler) {
   const annotations = A.getAnnotations(handler);
   return annotations.map(function(annotation) {
     return {
-      annotation: annotation,
+      method: annotation.method,
+      url: annotation.url,
+      callsiteError: annotation.callsiteError,
       handler: handler
     };
   });
@@ -44,7 +46,9 @@ function scanPrototypeChain(ctor, proto, seen) {
 
       return annotations.map(function(annotation) {
         return {
-          annotation: annotation,
+          method: annotation.method,
+          url: annotation.url,
+          callsiteError: annotation.callsiteError,
           handler: instantiateAndHandle(ctor, prop)
         };
       });

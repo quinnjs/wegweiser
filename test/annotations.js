@@ -12,8 +12,8 @@ function handler(req) { return 'ok'; }
 function getFoo() {}
 
 test('Function annotation', t => {
-  const first = GET `/` (handler);
-  const second = PUT `/bar` (handler);
+  const first = GET('/')(handler);
+  const second = PUT('/bar')(handler);
 
   t.equal(first, second); // no wrapping
   t.equal(first, handler);
@@ -21,11 +21,9 @@ test('Function annotation', t => {
   const annotations = getAnnotations(handler);
   t.equal(annotations.length, 2);
   t.equal(annotations[0].method, 'GET');
-  t.deepEqual(annotations[0].staticSegments, [ '/' ]);
-  t.deepEqual(annotations[0].params, []);
+  t.deepEqual(annotations[0].url, '/');
   t.equal(annotations[1].method, 'PUT');
-  t.deepEqual(annotations[1].staticSegments, [ '/bar' ]);
-  t.deepEqual(annotations[1].params, []);
+  t.deepEqual(annotations[1].url, '/bar');
 
   t.end();
 });
@@ -34,7 +32,7 @@ test('Property annotation', t => {
   const resource = {};
   const fooDescriptor = { value: getFoo, configurable: true, writable: true };
   Object.defineProperty(resource, 'getFoo',
-    (GET `/foo` (resource, 'getFoo', fooDescriptor)) || fooDescriptor);
+    (GET('/foo')(resource, 'getFoo', fooDescriptor)) || fooDescriptor);
   t.equal(resource.getFoo, getFoo);
   t.equal(getAnnotations(resource.getFoo).length, 1);
   t.equal(getPropertyAnnotations(resource, 'getFoo').length, 1);
