@@ -6,7 +6,7 @@ const Wegweiser = require('../'),
       createRouter = Wegweiser.createRouter,
       GET = Wegweiser.GET;
 
-test('duplicate routes', t => {
+test('duplicate routes', function(t) {
   try {
     createRouter(
       GET('/healthy')(function() {}),
@@ -22,7 +22,7 @@ test('duplicate routes', t => {
   }
 });
 
-test('createRouter', t => {
+test('createRouter', function(t) {
   function Resource() {}
   Resource.prototype.getFoo = GET('/foo')(function(req) {
     return `get foo:${req.url}`;

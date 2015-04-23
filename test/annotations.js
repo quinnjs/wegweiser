@@ -11,7 +11,7 @@ const A = require('../annotations'),
 function handler(req) { return 'ok'; }
 function getFoo() {}
 
-test('Function annotation', t => {
+test('Function annotation', function(t) {
   const first = GET('/')(handler);
   const second = PUT('/bar')(handler);
 
@@ -28,7 +28,7 @@ test('Function annotation', t => {
   t.end();
 });
 
-test('Property annotation', t => {
+test('Property annotation', function(t) {
   const resource = {};
   const fooDescriptor = { value: getFoo, configurable: true, writable: true };
   Object.defineProperty(resource, 'getFoo',

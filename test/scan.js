@@ -7,7 +7,7 @@ const test = require('tape');
 const A = require('../annotations');
 const scan = require('../scan');
 
-test('scan functions', t => {
+test('scan functions', function(t) {
   function getFoo(req) { return 'ok'; }
 
   A.GET('/foo')(getFoo);
@@ -26,7 +26,7 @@ test('scan functions', t => {
   t.end();
 });
 
-test('scan class', t => {
+test('scan class', function(t) {
   function BaseResource() {
     this.prefix = 'base:';
   }
