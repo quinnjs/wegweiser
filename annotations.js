@@ -48,7 +48,7 @@ function getScopedAnnotate(method, url, callsiteError) {
   };
 }
 
-const methods = [ 'GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'HEAD' ];
+const methods = [ 'GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS' ];
 exports.methods = methods;
 
 methods.forEach(function(method) {
