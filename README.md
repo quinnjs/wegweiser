@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.org/quinnjs/wegweiser.svg?branch=master)](https://travis-ci.org/quinnjs/wegweiser)
 
-A router for [Quinn](https://www.npmjs.org/package/quinn).
+A router for [Quinn](https://www.npmjs.org/package/quinn),
+powered by [routington](https://www.npmjs.org/package/routington).
 
 For decorators, you'll need babel with `--stage 1`.
 
