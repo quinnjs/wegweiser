@@ -14,13 +14,6 @@ const simpleHandler = GET('/my/scope')(req => {
   return respond().body('ok');
 });
 
-const usingDecorators = {
-  @GET('/add/:a/:b')
-  getSum(req, { a, b }) {
-    return respond().body(`${a} + ${b} = ${a + b}`);
-  }
-};
-
 class PretendingItsJava {
   @PUT('/user/:username/profile')
   async updateProfile(req, { username }) {
@@ -29,6 +22,6 @@ class PretendingItsJava {
   }
 }
 
-const router = createRouter(simpleHandler, usingDecorators, PretendingItsJava);
+const router = createRouter(simpleHandler, PretendingItsJava);
 // router is a quinn handler: request => response
 ```
