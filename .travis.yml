@@ -1,3 +1,11 @@
 language: node_js
 node_js:
-  - iojs
+- iojs
+deploy:
+  provider: npm
+  email: jan.krems+quinnjs@gmail.com
+  api_key:
+    secure: kUzQ7O9OrQJ9qW0A0xLDblfCR6OTbA8LvAZpW1Z95Yy1Y4j8pPq2Y3fCAs1dh5PTWJaFnMnP6x61ghu1TfJqXd8fVAG3xqhEtGicaQcK8YJrPFti1M3oYhm2Z6k0HaBOm3lNI6b2qQuVhbZFjEgwMPQbzRdYgRfbkPXsixz2h1Y=
+  on:
+    tags: true
+    repo: quinnjs/wegweiser
