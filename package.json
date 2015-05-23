@@ -14,6 +14,8 @@
   },
   "keywords": [
     "quinn",
+    "decorator",
+    "trie",
     "router"
   ],
   "bugs": {
