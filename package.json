@@ -25,6 +25,7 @@
     "tape": "^4.0.0"
   },
   "dependencies": {
+    "footnote": "0.0.4",
     "routington": "^1.0.3"
   }
 }
