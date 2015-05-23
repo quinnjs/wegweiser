@@ -60,7 +60,7 @@ The `request` is expected to have two properties:
 
 If one of the routes matches, the router will call the route handler
 with two arguments: the `request` (just passed through) and `params`.
-`params` is an object containing the params parameters.
+`params` is an object containing the path parameters.
 
 ##### Example
 
