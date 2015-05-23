@@ -1,12 +1,11 @@
 'use strict';
 
 const test = require('tape');
+const scan = require('footnote').scan;
 
-const A = require('../annotations'),
-      GET = A.GET,
-      PUT = A.PUT,
-      getAnnotations = A.getAnnotations,
-      getPropertyAnnotations = A.getPropertyAnnotations;
+const _tmp = require('..'),
+      GET = _tmp.GET,
+      PUT = _tmp.PUT;
 
 function handler(req) { return 'ok'; }
 function getFoo() {}
@@ -18,12 +17,12 @@ test('Function annotation', function(t) {
   t.equal(first, second); // no wrapping
   t.equal(first, handler);
 
-  const annotations = getAnnotations(handler);
-  t.equal(annotations.length, 2);
-  t.equal(annotations[0].method, 'GET');
-  t.deepEqual(annotations[0].url, '/');
-  t.equal(annotations[1].method, 'PUT');
-  t.deepEqual(annotations[1].url, '/bar');
+  const results = scan(handler);
+  t.equal(results.length, 2);
+  t.equal(results[0].annotation.method, 'GET');
+  t.deepEqual(results[0].annotation.url, '/');
+  t.equal(results[1].annotation.method, 'PUT');
+  t.deepEqual(results[1].annotation.url, '/bar');
 
   t.end();
 });
@@ -34,11 +33,9 @@ test('Property annotation', function(t) {
   Object.defineProperty(resource, 'getFoo',
     (GET('/foo')(resource, 'getFoo', fooDescriptor)) || fooDescriptor);
   t.equal(resource.getFoo, getFoo);
-  t.equal(getAnnotations(resource.getFoo).length, 1);
-  t.equal(getPropertyAnnotations(resource, 'getFoo').length, 1);
+  t.equal(scan(resource.getFoo).length, 1);
   resource.getFoo = resource.getFoo.bind(resource);
-  t.equal(getAnnotations(resource.getFoo).length, 0); // bind lost our property
-  t.equal(getPropertyAnnotations(resource, 'getFoo').length, 1); // to the rescue!
+  t.equal(scan(resource.getFoo).length, 0); // bind lost our property
 
   t.end();
 });

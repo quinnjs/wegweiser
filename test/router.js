@@ -12,6 +12,8 @@ test('duplicate routes', function(t) {
       GET('/healthy')(function() {}),
       GET('/healthy')(function() {})
     );
+    t.fail('Should have thrown');
+    t.end();
   } catch (error) {
     t.equal(error.message, 'Ambiguous route definition for GET /healthy',
       'Complains about ambiguous route definition');
@@ -23,12 +25,14 @@ test('duplicate routes', function(t) {
 });
 
 test('createRouter', function(t) {
-  function Resource() {}
+  function Resource() {
+    this.attr = 'ok';
+  }
   Resource.prototype.getFoo = GET('/foo')(function(req) {
-    return `get foo:${req.url}`;
+    return `get foo:${req.url} - ${this.attr}`;
   });
   Resource.prototype.getPage = GET('/p/:id')(function(req, params) {
-    return `get page #${params.id}`;
+    return `get page #${params.id} - ${this.attr}`;
   });
 
   function healthcheck(req) { return 'ok'; }
@@ -41,10 +45,10 @@ test('createRouter', function(t) {
   t.equal(route({ method: 'PUT', url: '/foo' }), undefined,
     'Returns `undefined` when method does not match');
 
-  t.equal(route({ method: 'GET', url: '/foo' }), 'get foo:/foo',
+  t.equal(route({ method: 'GET', url: '/foo' }), 'get foo:/foo - ok',
     'Forwards return value for simple static route');
 
-  t.equal(route({ method: 'GET', url: '/p/home' }), 'get page #home',
+  t.equal(route({ method: 'GET', url: '/p/home' }), 'get page #home - ok',
     'Forwards return value with path parameter');
 
   t.equal(route({ method: 'GET', url: '/healthy' }), 'ok',
