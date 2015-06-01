@@ -23,10 +23,15 @@ function createHandler(result) {
   if (typeof result.ctor === 'function') {
     const ctor = result.ctor, key = result.key;
     
-    return function constructAndHandle(req) {
+    const constructAndHandle = function constructAndHandle(req) {
       const instance = new ctor(req);
       return instance[key].apply(instance, arguments);
     };
+
+    constructAndHandle.ctor = ctor;
+    constructAndHandle.key = key;
+
+    return constructAndHandle;
   }
   return result.target;
 }
@@ -37,24 +42,38 @@ function createRouter() {
 
   for (let target of targets) {
     for (let result of scan(target, Route)) {
-      const route = result.annotation;
-      const node = router.define(route.url)[0];
-      if (node[route.method]) {
-        const error = route.callsiteError || new Error();
+      const a = result.annotation,
+            method = a.method,
+            url = a.url,
+            callsiteError = a.callsiteError;
+      const node = router.define(url)[0];
+      if (node[method]) {
+        const error = callsiteError || new Error();
         error.message =
-          `Ambiguous route definition for ${route.method} ${route.url}`;
+          `Ambiguous route definition for ${method} ${url}`;
         throw error;
       }
-      node[route.method] = createHandler(result);
+      node[method] = createHandler(result);
     }
   }
 
-  return function route(req) {
+  function resolve(req) {
     const match = router.match(getPathname(req.url));
     const handler = match && match.node[req.method];
     if (!handler) return;
-    return handler(req, match.param);
-  };
+    return { handler: handler, params: match.param };
+  }
+
+  function route(req) {
+    const resolved = resolve(req);
+    if (!resolved) return;
+    const handler = resolved.handler;
+    return handler(req, resolved.params);
+  }
+
+  route.resolve = resolve;
+
+  return route;
 }
 
 METHODS.forEach(function(method) {

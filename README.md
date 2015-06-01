@@ -74,6 +74,37 @@ The return value of the router is whatever the route handler returns,
 no changes or assumptions are made by `wegweiser` itself.
 If no route matches, the router will return `undefined`.
 
+### `router.resolve(req)`
+
+Can be used to retrieve the function that would be called for a given request.
+It returns either `undefined` (if no route matches the request)
+or an object with the following properties:
+
+* `params`: The route parameters.
+* `handler`: The request handler, ready to be called with `req` and `params`.
+
+For class method routes, the `handler` will have two properties itself:
+
+* `ctor`: The constructor of the class.
+* `key`: The property key of the method to call on the instance.
+
+##### Example
+
+```js
+class MyResource {
+  constructor(db) { this.db = db; }
+
+  @GET('/my/:id')
+  getById(req, {id}) { return this.db.getById(id); }
+}
+const router = createRouter(MyResource);
+
+const req = { method: 'GET', url: '/my/foo' };
+const {params, handler} = router.resolve(req);
+const instance = someDIContainer.construct(handler.ctor);
+return instance[handler.key](req, params);
+```
+
 ### `Route(method: String, path: String)`
 
 A `footnote` annotation decorator that adds metadata to functions or methods
