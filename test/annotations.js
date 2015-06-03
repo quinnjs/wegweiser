@@ -8,7 +8,6 @@ const _tmp = require('..'),
       PUT = _tmp.PUT;
 
 function handler(req) { return 'ok'; }
-function getFoo() {}
 
 test('Function annotation', function(t) {
   const first = GET('/')(handler);
@@ -28,12 +27,19 @@ test('Function annotation', function(t) {
 });
 
 test('Property annotation', function(t) {
+  function getFoo() {}
+
   const resource = {};
   const fooDescriptor = { value: getFoo, configurable: true, writable: true };
   Object.defineProperty(resource, 'getFoo',
     (GET('/foo')(resource, 'getFoo', fooDescriptor)) || fooDescriptor);
+
   t.equal(resource.getFoo, getFoo);
   t.equal(scan(resource.getFoo).length, 1);
+
+  t.equal(scan(resource).length, 1,
+    'properties are discovered via the object as well');
+
   resource.getFoo = resource.getFoo.bind(resource);
   t.equal(scan(resource.getFoo).length, 0); // bind lost our property
 

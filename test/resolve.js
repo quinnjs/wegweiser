@@ -10,11 +10,21 @@ class MyResource {
   del() {}
 }
 
+class CustomResource {
+  change() {}
+}
+
 createRouter.DELETE('/my/:id')(MyResource.prototype, 'del',
   Object.getOwnPropertyDescriptor(MyResource.prototype, 'del'));
 
+createRouter.PUT('/custom/:thing')(CustomResource.prototype, 'change',
+  Object.getOwnPropertyDescriptor(CustomResource.prototype, 'change'));
+
+const instance = new CustomResource();
+
 const router = createRouter(
   createRouter.GET('/f')(f),
+  instance,
   MyResource
 );
 
@@ -25,10 +35,18 @@ test('function target', function(t) {
   t.end();
 });
 
-test('resource method target', function(t) {
+test('resource class, method target', function(t) {
   const result = router.resolve({ method: 'DELETE', url: '/my/x' });
   t.deepEqual(result.params, { id: 'x' }, 'has params');
   t.equal(result.handler.key, 'del', 'passes property key');
   t.equal(result.handler.ctor, MyResource, 'passes constructor');
+  t.end();
+});
+
+test('resource instance, method target', function(t) {
+  const result = router.resolve({ method: 'PUT', url: '/custom/boat' });
+  t.deepEqual(result.params, { thing: 'boat' }, 'has params');
+  t.equal(result.handler.key, 'change', 'passes property key');
+  t.equal(result.handler.ctx, instance, 'passes context object');
   t.end();
 });
