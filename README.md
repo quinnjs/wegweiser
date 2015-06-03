@@ -32,8 +32,13 @@ class PretendingItsJava {
   }
 }
 
-const router = createRouter(simpleHandler, PretendingItsJava);
-// router is a quinn handler: request => response
+const objectOrInstance {
+  @GET('/object/:op')
+  getObject(req, { op }) { return respond.json({ op }); }
+}
+
+const router = // router is a quinn handler: request => response
+  createRouter(simpleHandler, PretendingItsJava, objectOrInstance);
 ```
 
 For [decorators](https://github.com/wycats/javascript-decorators),
@@ -45,8 +50,10 @@ you'll need babel with `--stage 1`.
 
 *This is also the default export.*
 
-Each argument to this function should either be an annotated function
-or a class with annotated methods.
+Each argument to this function should be an annotated function,
+a class with annotated methods,
+or an object with annoated methods.
+Both for objects and classes the prototype chain will be scanned.
 Routes have to be unambiguous.
 If the same method and path combination is configured twice,
 creating the router will fail.

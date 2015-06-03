@@ -23,15 +23,26 @@ function createHandler(result) {
   if (typeof result.ctor === 'function') {
     const ctor = result.ctor, key = result.key;
     
-    const constructAndHandle = function constructAndHandle(req) {
+    const constructAndHandle = function constructAndHandle(req, params) {
       const instance = new ctor(req);
-      return instance[key].apply(instance, arguments);
+      return instance[key](req, params);
     };
 
     constructAndHandle.ctor = ctor;
     constructAndHandle.key = key;
 
     return constructAndHandle;
+  } else if (result.ctx !== null && typeof result.ctx === 'object') {
+    const ctx = result.ctx, key = result.key;
+
+    const applyHandlerToContext = function applyHandlerToContext(req, params) {
+      return ctx[key](req, params);
+    };
+
+    applyHandlerToContext.ctx = ctx;
+    applyHandlerToContext.key = key;
+
+    return applyHandlerToContext;
   }
   return result.target;
 }

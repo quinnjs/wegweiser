@@ -37,7 +37,14 @@ test('createRouter', function(t) {
 
   function healthcheck(req) { return 'ok'; }
 
-  const route = createRouter(Resource, GET('/healthy')(healthcheck));
+  function CustomResource(prop) {
+    this.prop = prop;
+  }
+  CustomResource.prototype.getBar = GET('/bar')(function(req) {
+    return `get bar:${req.url} - ${this.prop}`;
+  });
+
+  const route = createRouter(Resource, GET('/healthy')(healthcheck), new CustomResource('kk'));
 
   t.equal(route({ method: 'GET', url: '/' }), undefined,
     'Returns `undefined` when url isn\'t routed');
@@ -56,6 +63,9 @@ test('createRouter', function(t) {
 
   t.equal(route({ method: 'GET', url: '/healthy?foo=bar' }), 'ok',
     'Ignores query string');
+
+  t.equal(route({ method: 'GET', url: '/bar' }), 'get bar:/bar - kk',
+    'Supports objects');
 
   t.end();
 });
